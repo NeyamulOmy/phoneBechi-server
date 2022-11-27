@@ -15,6 +15,7 @@ async function run() {
     try {
         const categoriesCollection = client.db('phone-bechi').collection('categoriesCollection');
         const usersCollection = client.db('phone-bechi').collection('users');
+        const productsCollection = client.db('phone-bechi').collection('products');
         app.get('/categories', async (req, res) => {
             const query = {};
             const categories = await categoriesCollection.find(query).toArray();
@@ -32,7 +33,18 @@ async function run() {
             const email = req.params.email;
             const query = { email };
             const user = await usersCollection.findOne(query);
-            res.send({ isSeller: user?.role === 'Seller' })
+            res.send({ isSeller: user?.userType === 'Seller' })
+        })
+        app.post('/products', async (req, res) => {
+            const product = req.body;
+            const result = await productsCollection.insertOne(product);
+            res.send(result);
+        });
+        app.get('/category/:category', async (req, res) => {
+            const brand = req.params.category;
+            const query = { category: brand }
+            const products = await productsCollection.find(query).toArray();
+            res.send(products)
         })
     }
     finally {
