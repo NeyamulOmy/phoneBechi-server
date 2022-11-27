@@ -13,16 +13,24 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
-
-    }
-    finally {
         const categoriesCollection = client.db('phone-bechi').collection('categoriesCollection');
-
+        const usersCollection = client.db('phone-bechi').collection('users');
         app.get('/categories', async (req, res) => {
             const query = {};
             const categories = await categoriesCollection.find(query).toArray();
             res.send(categories);
         })
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            console.log(user);
+            // TODO: make sure you do not enter duplicate user email
+            // only insert users if the user doesn't exist in the database
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+        });
+    }
+    finally {
+
     }
 
 }
