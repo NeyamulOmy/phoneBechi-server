@@ -52,12 +52,12 @@ async function run() {
             const booking = req.body;
             console.log(booking);
             const query = {
-                name: productName,
-                price: price,
-                buyer: userName,
-                email: userEmail,
-                phone: phone,
-                location: location
+                productName: booking.productName,
+                price: booking.price,
+                buyer: booking.userName,
+                email: booking.userEmail,
+                phone: booking.phone,
+                location: booking.location
             }
 
             const alreadyBooked = await bookingsCollection.find(query).toArray();
