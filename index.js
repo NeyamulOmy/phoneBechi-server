@@ -16,6 +16,8 @@ async function run() {
         const categoriesCollection = client.db('phone-bechi').collection('categoriesCollection');
         const usersCollection = client.db('phone-bechi').collection('users');
         const productsCollection = client.db('phone-bechi').collection('products');
+        const bookingsCollection = client.db('phone-bechi').collection('bookings');
+
         app.get('/categories', async (req, res) => {
             const query = {};
             const categories = await categoriesCollection.find(query).toArray();
@@ -46,6 +48,28 @@ async function run() {
             const products = await productsCollection.find(query).toArray();
             res.send(products)
         })
+        app.post('/bookings', async (req, res) => {
+            const booking = req.body;
+            console.log(booking);
+            const query = {
+                name: productName,
+                price: price,
+                buyer: userName,
+                email: userEmail,
+                phone: phone,
+                location: location
+            }
+
+            const alreadyBooked = await bookingsCollection.find(query).toArray();
+
+            if (alreadyBooked.length) {
+                const message = `You already have a booking on ${booking.appointmentDate}`
+                return res.send({ acknowledged: false, message })
+            }
+
+            const result = await bookingsCollection.insertOne(booking);
+            res.send(result);
+        });
     }
     finally {
 
