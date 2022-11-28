@@ -38,11 +38,23 @@ async function run() {
             const user = await usersCollection.findOne(query);
             res.send({ isBuyer: user?.userType === 'Buyer' })
         })
+        app.get('/users/seller/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await usersCollection.findOne(query);
+            res.send({ isSeller: user?.userType === 'Seller' })
+        })
         app.post('/products', async (req, res) => {
             const product = req.body;
             const result = await productsCollection.insertOne(product);
             res.send(result);
         });
+        app.get('/products', async (req, res) => {
+            const email = req.query.email;
+            const query = { email };
+            const products = await productsCollection.find(query).toArray();
+            res.send(products);
+        })
         app.get('/category/:category', async (req, res) => {
             const brand = req.params.category;
             const query = { category: brand }
