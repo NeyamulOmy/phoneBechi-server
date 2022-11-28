@@ -101,6 +101,11 @@ async function run() {
             const buyers = await usersCollection.find(query).toArray();
             res.send(buyers);
         })
+        app.get('/sellers', async (req, res) => {
+            const query = { userType: 'Seller' };
+            const sellers = await usersCollection.find(query).toArray();
+            res.send(sellers);
+        })
 
     }
     finally {
