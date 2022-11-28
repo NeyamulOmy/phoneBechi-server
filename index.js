@@ -31,11 +31,12 @@ async function run() {
             const result = await usersCollection.insertOne(user);
             res.send(result);
         });
-        app.get('/users/seller/:email', async (req, res) => {
+
+        app.get('/users/buyer/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };
             const user = await usersCollection.findOne(query);
-            res.send({ isSeller: user?.userType === 'Seller' })
+            res.send({ isBuyer: user?.userType === 'Buyer' })
         })
         app.post('/products', async (req, res) => {
             const product = req.body;
@@ -70,6 +71,14 @@ async function run() {
             const result = await bookingsCollection.insertOne(booking);
             res.send(result);
         });
+        app.get('/bookings', async (req, res) => {
+            const email = req.query.email;
+
+            const query = { email: email };
+            const bookings = await bookingsCollection.find(query).toArray();
+            res.send(bookings);
+        });
+
     }
     finally {
 
