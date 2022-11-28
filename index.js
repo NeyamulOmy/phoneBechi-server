@@ -96,6 +96,11 @@ async function run() {
             const bookings = await bookingsCollection.find(query).toArray();
             res.send(bookings);
         });
+        app.get('/buyers', async (req, res) => {
+            const query = { userType: 'Buyer' };
+            const buyers = await usersCollection.find(query).toArray();
+            res.send(buyers);
+        })
 
     }
     finally {
